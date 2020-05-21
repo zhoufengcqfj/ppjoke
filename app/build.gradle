@@ -18,6 +18,9 @@ android {
         }
     }
 
+    dataBinding {
+        enabled = true
+    }
     compileOptions {
         sourceCompatibility "1.8"
         targetCompatibility "1.8"
@@ -42,4 +45,5 @@ dependencies {
     //如果你使用kotlin,这里需要使用 kapt project
     annotationProcessor project(":libnavcompiler")
     implementation project(':libcommon')
+    implementation project(':libnetwork')
 }
