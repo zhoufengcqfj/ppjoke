@@ -29,10 +29,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public abstract class AbsListFragment<T,M extends AbsViewModel<T>> extends Fragment implements OnRefreshListener, OnLoadMoreListener {
 
-    private LayoutRefreshViewBinding mBinding;
-    private RecyclerView mRecyclerView;
-    private SmartRefreshLayout mRefreshLayout;
-    private EmptyView mEmptyView;
+    protected LayoutRefreshViewBinding mBinding;
+    protected RecyclerView mRecyclerView;
+    protected SmartRefreshLayout mRefreshLayout;
+    protected EmptyView mEmptyView;
     protected M mViewModel;
     protected DividerItemDecoration decoration;
     protected PagedListAdapter<T, RecyclerView.ViewHolder> adapter;

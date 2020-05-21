@@ -15,6 +15,7 @@ import com.mooc.ppjoke.model.Feed;
 import com.mooc.ppjoke.model.TagList;
 import com.mooc.ppjoke.model.User;
 import com.mooc.ppjoke.ui.login.UserManager;
+import com.mooc.ppjoke.ui.share.ShareDialog;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -52,25 +53,25 @@ public class InteractionPresenter {
     }
 
     private static void toggleFeedLikeInternal(Feed feed) {
-//        ApiService.get(URL_TOGGLE_FEED_LIK)
-//            .addParam("userId", UserManager.get().getUserId())
-//            .addParam("itemId", feed.itemId)
-//                .execute(new JsonCallback<JSONObject>() {
-//        @Override
-//        public void onSuccess(ApiResponse<JSONObject> response) {
-//            if (response.body != null) {
-//                boolean hasLiked = response.body.getBoolean("hasLiked").booleanValue();
-//                feed.getUgc().setHasLiked(hasLiked);
+        ApiService.get(URL_TOGGLE_FEED_LIK)
+            .addParam("userId", UserManager.get().getUserId())
+            .addParam("itemId", feed.itemId)
+                .execute(new JsonCallback<JSONObject>() {
+        @Override
+        public void onSuccess(ApiResponse<JSONObject> response) {
+            if (response.body != null) {
+                boolean hasLiked = response.body.getBoolean("hasLiked").booleanValue();
+                feed.getUgc().setHasLiked(hasLiked);
 //                LiveDataBus.get().with(DATA_FROM_INTERACTION)
 //                        .postValue(feed);
-//            }
-//        }
-//
-//        @Override
-//        public void onError(ApiResponse<JSONObject> response) {
-//            showToast(response.message);
-//        }
-//    });
+            }
+        }
+
+        @Override
+        public void onError(ApiResponse<JSONObject> response) {
+            showToast(response.message);
+        }
+    });
 }
 
     //给一个帖子点踩一踩/取消踩一踩,它和给帖子点赞是互斥的
@@ -107,38 +108,38 @@ public class InteractionPresenter {
 
     //打开分享面板
     public static void openShare(Context context, Feed feed) {
-//        String shareContent = feed.feeds_text;
-//        if (!TextUtils.isEmpty(feed.url)) {
-//            shareContent = feed.url;
-//        } else if (!TextUtils.isEmpty(feed.cover)) {
-//            shareContent = feed.cover;
-//        }
-//        ShareDialog shareDialog = new ShareDialog(context);
-//        shareDialog.setShareContent(shareContent);
-//        shareDialog.setShareItemClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                ApiService.get(URL_SHARE)
-//                        .addParam("itemId", feed.itemId)
-//                        .execute(new JsonCallback<JSONObject>() {
-//                            @Override
-//                            public void onSuccess(ApiResponse<JSONObject> response) {
-//                                if (response.body != null) {
-//                                    int count = response.body.getIntValue("count");
-//                                    feed.getUgc().setShareCount(count);
-//                                }
-//                            }
-//
-//                            @Override
-//                            public void onError(ApiResponse<JSONObject> response) {
-//                                showToast(response.message);
-//                            }
-//                        });
-//            }
-//        });
-//
-//        shareDialog.show();
+        String shareContent = feed.feeds_text;
+        if (!TextUtils.isEmpty(feed.url)) {
+            shareContent = feed.url;
+        } else if (!TextUtils.isEmpty(feed.cover)) {
+            shareContent = feed.cover;
+        }
+        ShareDialog shareDialog = new ShareDialog(context);
+        shareDialog.setShareContent(shareContent);
+        shareDialog.setShareItemClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                ApiService.get(URL_SHARE)
+                        .addParam("itemId", feed.itemId)
+                        .execute(new JsonCallback<JSONObject>() {
+                            @Override
+                            public void onSuccess(ApiResponse<JSONObject> response) {
+                                if (response.body != null) {
+                                    int count = response.body.getIntValue("count");
+                                    feed.getUgc().setShareCount(count);
+                                }
+                            }
+
+                            @Override
+                            public void onError(ApiResponse<JSONObject> response) {
+                                showToast(response.message);
+                            }
+                        });
+            }
+        });
+
+        shareDialog.show();
     }
 
     //给一个帖子的评论点赞/取消点赞

@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
+import androidx.databinding.adapters.ViewBindingAdapter;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -19,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.mooc.libnavannotation.FragmentDestination;
 import com.mooc.ppjoke.R;
+import com.mooc.ppjoke.exoplayer.PageListPlayDetector;
 import com.mooc.ppjoke.model.Feed;
 import com.mooc.ppjoke.ui.AbsListFragment;
 import com.mooc.ppjoke.ui.MutablePageKeyedDataSource;
@@ -28,22 +30,42 @@ import java.util.List;
 
 @FragmentDestination(pageUrl = "main/tabs/home", asStarter = true)
 public class HomeFragment extends AbsListFragment<Feed, HomeViewModel> {
-
-
+    private PageListPlayDetector playDetector;
     @Override
-    protected void afterCreateView() {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         mViewModel.getCacheLiveData().observe(this, new Observer<PagedList<Feed>>() {
             @Override
             public void onChanged(PagedList<Feed> feeds) {
-                adapter.submitList(feeds);
+                submitList(feeds);
             }
         });
+        playDetector = new PageListPlayDetector(this, mRecyclerView);
+//        mViewModel.setFeedType(feedType);
+    }
+
+    @Override
+    protected void afterCreateView() {
+
     }
 
     @Override
     public PagedListAdapter getAdapter() {
         String feedType = getArguments() == null ? "all" : getArguments().getString("feedType");
-        return new FeedAdapter(getContext(), feedType);
+        return new FeedAdapter(getContext(),feedType){
+            @Override
+            public void onViewAttachedToWindow(@NonNull ViewHolder holder) {
+                super.onViewAttachedToWindow(holder);
+                if (holder.isVideoItem()){
+                    playDetector.addTarget(holder.getListPlayerView());
+                }
+
+            }
+
+            @Override
+            public void onViewDetachedFromWindow(@NonNull ViewHolder holder) {
+                super.onViewDetachedFromWindow(holder);
+            }
+        };
     }
 
     @Override
@@ -75,5 +97,11 @@ public class HomeFragment extends AbsListFragment<Feed, HomeViewModel> {
     @Override
     public void onRefresh(@NonNull RefreshLayout refreshLayout) {
         mViewModel.getDataSource().invalidate();
+    }
+
+    @Override
+    public void onPause() {
+        playDetector.onPause();
+        super.onPause();
     }
 }

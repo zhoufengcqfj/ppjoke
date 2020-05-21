@@ -5,7 +5,7 @@ import java.io.Serializable;
 import androidx.annotation.Nullable;
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
-//import androidx.databinding.library.baseAdapters.BR;
+import androidx.databinding.library.baseAdapters.BR;
 
 public class Ugc extends BaseObservable implements Serializable {
     /**
@@ -26,7 +26,7 @@ public class Ugc extends BaseObservable implements Serializable {
 
     public void setShareCount(int shareCount) {
         this.shareCount = shareCount;
-//        notifyPropertyChanged(BR._all);
+        notifyPropertyChanged(BR._all);
     }
 
     public int shareCount;
@@ -46,7 +46,7 @@ public class Ugc extends BaseObservable implements Serializable {
             setHasLiked(false);
         }
         this.hasdiss = hasdiss;
-//        notifyPropertyChanged(BR._all);
+        notifyPropertyChanged(BR._all);
     }
 
     public boolean hasLiked;
@@ -66,7 +66,7 @@ public class Ugc extends BaseObservable implements Serializable {
             likeCount = likeCount - 1;
         }
         this.hasLiked = hasLiked;
-//        notifyPropertyChanged(BR._all);
+        notifyPropertyChanged(BR._all);
     }
 
 
@@ -90,6 +90,6 @@ public class Ugc extends BaseObservable implements Serializable {
 
     public void setHasFavorite(boolean hasFavorite) {
         this.hasFavorite = hasFavorite;
-//        notifyPropertyChanged(BR._all);
+        notifyPropertyChanged(BR._all);
     }
 }

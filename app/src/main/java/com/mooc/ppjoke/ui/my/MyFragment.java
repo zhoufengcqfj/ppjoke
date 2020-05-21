@@ -16,7 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
-@FragmentDestination(pageUrl = "main/tabs/my", asStarter = true)
+@FragmentDestination(pageUrl = "main/tabs/my", asStarter = false, needLogin = true)
 public class MyFragment extends Fragment {
 
 

@@ -8,9 +8,11 @@ import android.view.ViewGroup;
 import com.mooc.ppjoke.databinding.LayoutFeedTypeImageBinding;
 import com.mooc.ppjoke.databinding.LayoutFeedTypeVideoBinding;
 import com.mooc.ppjoke.model.Feed;
+import com.mooc.ppjoke.view.ListPlayerView;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.ViewDataBinding;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.paging.PagedListAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
@@ -62,7 +64,7 @@ public class FeedAdapter extends PagedListAdapter<Feed, FeedAdapter.ViewHolder> 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private ViewDataBinding mBinding;
-
+        public ListPlayerView listPlayerView;
         public ViewHolder(@NonNull View itemView, ViewDataBinding binding) {
             super(itemView);
             mBinding = binding;
@@ -73,12 +75,21 @@ public class FeedAdapter extends PagedListAdapter<Feed, FeedAdapter.ViewHolder> 
                 LayoutFeedTypeImageBinding imageBinding = (LayoutFeedTypeImageBinding) mBinding;
                 imageBinding.setFeed(item);
                 imageBinding.feedImage.bindData(item.width,item.height,16,item.cover);
+                imageBinding.setLifeCycleOwner((LifecycleOwner) mContext);
             }else {
                 LayoutFeedTypeVideoBinding videoBinding = (LayoutFeedTypeVideoBinding) mBinding;
                 videoBinding.setFeed(item);
                 videoBinding.listPlayerView.bindData(mCategory, item.width, item.height, item.cover, item.url);
-//                listPlayerView = videoBinding.listPlayerView;
+                videoBinding.setLifeCycleOwner((LifecycleOwner) mContext);
+                listPlayerView = videoBinding.listPlayerView;
             }
+        }
+        public boolean isVideoItem() {
+            return mBinding instanceof LayoutFeedTypeVideoBinding;
+        }
+
+        public ListPlayerView getListPlayerView() {
+            return listPlayerView;
         }
     }
 }
